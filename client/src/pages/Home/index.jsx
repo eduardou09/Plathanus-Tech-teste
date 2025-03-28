@@ -4,6 +4,7 @@ import Input from "../../components/Input/input";
 import LineCards from "../../components/LineCards/lineCards";
 import useNewsStore from "../../store/newsStore";
 import { useEffect } from "react";
+import Read from "../../components/Read/read";
 
 export default function homeMain({
   isOpen,
@@ -17,13 +18,24 @@ export default function homeMain({
   searchTerm,
   setSearchTerm,
   news,
+  seeMore, 
+  setSeeMore,
+  handleSee,
+  newsSelected
 }) {
+  console.log({seeMore})
   console.log({ news });
   return (
     <main className="flex flex-col gap-2 w-full">
       {" "}
       {/* Use <main> para conteúdo principal */}
       {/* Título oculto para leitores de tela */}
+      {seeMore &&(
+        <Read
+        closeModal={() => setSeeMore(false)}
+        newsSelected={newsSelected}
+        />
+      )}
       {isOpen && (
         <Modal
           onSubmit={onSubmit}
@@ -54,10 +66,10 @@ export default function homeMain({
       </section>
       <section className="">
         {news.last7News.length > 0 && (
-          <LineCards news={news.last7News} title={"Últimas Notícias"} />
+          <LineCards news={news.last7News} title={"Últimas Notícias"}    handleSee={ handleSee}/>
         )}
         {news.otherNews.length > 0 && (
-          <LineCards news={news.otherNews} title={"Notícias Anteriores "} />
+          <LineCards news={news.otherNews} title={"Notícias Anteriores "}   handleSee={ handleSee} />
         )}
       </section>
     </main>

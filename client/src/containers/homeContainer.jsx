@@ -11,6 +11,8 @@ export default function HomeContainer() {
   const [isOpen, setIsOpen] = useState(false);
   const [currentId, setCurrentId] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [seeMore, setSeeMore] = useState(false);
+  const [newsSelected, setNewsSelected] = useState(null);
   // const formMethods = useForm({
   //   resolver: zodResolver(newsFormSchema)
   // });
@@ -25,7 +27,7 @@ export default function HomeContainer() {
     news, fetchNews 
   } = useNewsStore();
 
-  // Move o useForm para o container principal
+ 
   const {
     register,
     handleSubmit,
@@ -46,17 +48,34 @@ export default function HomeContainer() {
 
   // Atualiza o formulário quando editValues muda
   useEffect(() => {
+    console.log('--- Effect triggered ---');
+    console.log('Current editValues:', editValues);
+    
     if (editValues) {
-      reset({
+      console.log('Preparing to reset form with values:', {
         title: editValues.title,
         content: editValues.content,
-        author: editValues.author?.name || "",
+        author: editValues.author?.name || ""
       });
-      setCurrentId(editValues.id); // Armazena o ID separadamente
+      
+      const newValues = {
+        title: editValues.title,
+        content: editValues.content,
+        author: editValues.author?.name || ""
+      };
+      
+      reset(newValues);
+      console.log('Form reset called with values');
+      
+      setCurrentId(editValues.id);
+      console.log('Current ID set to:', editValues.id);
+      
       setIsOpen(true);
+      console.log('Modal opened');
     } else {
-      reset(); // Limpa o formulário
-      setCurrentId(null); // Reseta o ID
+      console.log('Clearing form');
+      reset();
+      setCurrentId(null);
     }
   }, [editValues, reset]);
 
@@ -116,7 +135,10 @@ export default function HomeContainer() {
     }
   };
 
-
+const handleSee = (item) =>{
+  setSeeMore(true)
+  setNewsSelected(item)
+}
 
   useEffect(() => {
     fetchNews();
@@ -126,7 +148,7 @@ export default function HomeContainer() {
     <>
       {" "}
       <Toaster position="top-center" reverseOrder={false} />
-      <HomeMain
+        <HomeMain
         isOpen={isOpen}
         openModal={() => setIsOpen(true)}
         closeModal={() => setIsOpen(false)}
@@ -139,6 +161,10 @@ export default function HomeContainer() {
       searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
         news={filteredData(news, searchTerm )}
+        seeMore={ seeMore} 
+        setSeeMore={ setSeeMore}
+        handleSee={handleSee}
+        newsSelected={newsSelected}
       />
     </>
   );
@@ -163,24 +189,21 @@ const filteredData = (news, filter) => {
     return { last7News, otherNews };
   }
 
-  // Caso haja filtro, converte o filtro para minúsculas
-  const searchTerm = filter.toLowerCase(); // Acessando corretamente o valor do filtro
+
+  const searchTerm = filter.toLowerCase(); 
   console.log({ searchTerm });
 
-  // Filtrando as notícias com base no filtro
+
   const filteredNews = news.filter((item) =>
     item.title.toLowerCase().includes(searchTerm) ||
     item.content.toLowerCase().includes(searchTerm) ||
     item.author?.name.toLowerCase().includes(searchTerm)
   );
 
-  // Ordenando as notícias filtradas pela data (do mais recente para o mais antigo)
   const sortedFilteredNews = filteredNews.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
-  // Pegando as últimas 7 notícias filtradas
   const last7News = sortedFilteredNews.slice(0, 7);
 
-  // Pegando as outras notícias filtradas
   const otherNews = sortedFilteredNews.slice(7);
 
   return { last7News, otherNews };

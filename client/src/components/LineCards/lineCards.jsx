@@ -5,7 +5,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 // init Swiper:
 import Card from "../Card/card";
 
-const LineCards = ({ news, title }) => {
+const LineCards = ({ news, title,   handleSee}) => {
   return (
     <div className="overflow-x-hidden    py-5">
       <div className="flex flex-col ml-5 mt-2 max-w-fit py-5">
@@ -40,7 +40,7 @@ const LineCards = ({ news, title }) => {
 >
   {news.map((item) => (
     <SwiperSlide key={item.id} className="h-auto"> {/* Slide com altura automática */}
-      <Card item={item} />
+      <Card item={item}   handleSee={handleSee}/>
     </SwiperSlide>
   ))}
 </Swiper>
