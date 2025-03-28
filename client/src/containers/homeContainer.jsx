@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 // import useNewsStore from '../stores/newsStore';
 import HomeMain from '../pages/Home';
 import { newsService } from '../services/newsServices';
+import { getNewsService } from '../services/getServices';
 
 
 
@@ -15,6 +16,9 @@ import { newsService } from '../services/newsServices';
   // Store (Zustand)
 //   const { createNews, news, loading, error } = useNewsStore();
 
+
+
+
   // Submit do formulário
   const onSubmit = async (data) => {
     console.log({data})
@@ -24,7 +28,7 @@ import { newsService } from '../services/newsServices';
       
 
       setIsOpen(false);
-      formMethods.reset();
+      // formMethods.reset();
   
      
       if (response.success) {
@@ -38,8 +42,27 @@ import { newsService } from '../services/newsServices';
     }
   };
 
-  console.log(isOpen)
-  const eduardo = "aa"
+  const handleEdit = async (data) => {
+    console.log({data})
+    try {
+      const response = await getNewsService(data); 
+      console.log("Resposta do backend:", response); 
+      
+
+      setIsOpen(true);
+      // formMethods.reset();
+  
+     
+      if (response.success) {
+        alert("Notícia criada com sucesso!");
+       
+      }
+    } catch (err) {
+      console.error("Erro ao criar notícia:", err);
+     
+      alert("Erro ao criar notícia. Tente novamente.");
+    }
+  };
 
   return (
    <HomeMain
@@ -47,6 +70,7 @@ import { newsService } from '../services/newsServices';
    openModal={() => setIsOpen(true)}
    closeModal={() => setIsOpen(false)}
   // formMethods={formMethods}
+  handleEdit={handleEdit}
    onSubmit={onSubmit}
     />
   );

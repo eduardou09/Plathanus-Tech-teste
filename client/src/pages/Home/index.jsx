@@ -1,12 +1,20 @@
 import { FaPlus } from "react-icons/fa";
 import Modal from "../../components/Modal/modal";
 import Input from "../../components/Input/input";
-import Card from "../../components/Card/card";
+import LineCards from "../../components/LineCards/lineCards";
+import useNewsStore from "../../store/newsStore";
+import { useEffect } from "react";
 
 export default function homeMain({isOpen, onSubmit, openModal, closeModal}) {
-    console.log(isOpen)
+  const { news, fetchNews, handleEdit} = useNewsStore();
+
+  useEffect(() => {
+    fetchNews();
+  }, []);
+
+console.log({news})
     return (
-        <div className="flex flex-col gap-10 w-screen">
+        <div className="flex flex-col gap-10 w-full">
           {isOpen && <Modal onSubmit={onSubmit} closeModal={closeModal} />}
   
         {/* Botão que abre a modal */}
@@ -20,10 +28,13 @@ export default function homeMain({isOpen, onSubmit, openModal, closeModal}) {
           <Input />
         </div>
   
-        {/* Lista de cards */}
-        <div className="flex">
-          <Card />
-        </div>
+       
+        <div className=""> 
+  <div className="">
+    <LineCards news={news} handleEdit={handleEdit}/>
+    <LineCards news={news} />
+  </div>
+</div>
       </div>
     )
 }
