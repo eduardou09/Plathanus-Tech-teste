@@ -4,7 +4,8 @@ import { FaTrashAlt } from "react-icons/fa";
 
 
 const Card = ({ item, loadingNumber, handleEdit }) => {
-  const { deleteNews } = useNewsStore();
+
+  const { deleteNews, setEditValues  } = useNewsStore();
   return (
     <div className="flex flex-col bg-white p-4 gap-5 rounded-[20px] max-h-[230px] min-h-[280px] flex-1 min-w-[380px] max-w-[400px] shadow-md hover:shadow-lg transition-shadow duration-300 ">
 
@@ -17,7 +18,7 @@ const Card = ({ item, loadingNumber, handleEdit }) => {
           
         </div>
           <div className="flex w-full gap-1"> 
-          <Button title={"Editar"} width={"w-2/3 "}  className={"h-full"} onClick={()=>handleEdit(item)}/>
+          <Button title={"Editar"} width={"w-2/3 "}  className={"h-full"} onClick={()=>setEditValues(item)}/>
           <Button title={<FaTrashAlt />} width={"w-1/3"} className={"h-full bg-red-500 hover:bg-red-600 text-white "} onClick={()=>deleteNews(item.id)}/>
           </div>
         

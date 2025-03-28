@@ -7,15 +7,15 @@ import Select from "../Select/select";
 import TextArea from "../TextArea/textArea";
 import { newsFormSchema } from "../../validations/newSchema";
 
-export default function Modal({ onSubmit, closeModal }) {
-  const {
-    register,
-    handleSubmit,
-    control,
-    formState: { errors },
-  } = useForm({
-    resolver: zodResolver(newsFormSchema),
-  });
+export default function Modal({ onSubmit, closeModal, register, control, errors, handleSubmit  }) {
+  // const {
+  //   register,
+  //   handleSubmit,
+  //   control,
+  //   formState: { errors },
+  // } = useForm({
+  //   resolver: zodResolver(newsFormSchema),
+  // });
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
@@ -40,6 +40,7 @@ export default function Modal({ onSubmit, closeModal }) {
 
             <div className="flex flex-col gap-3">
               <Input
+                // defaultValue= {}
                 {...register("title")}
                 placeholder="Insira o título"
                 width="w-full"
@@ -90,6 +91,7 @@ export default function Modal({ onSubmit, closeModal }) {
               <button
                 type="submit"
                 className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                
               >
                 Salvar
               </button>

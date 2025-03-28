@@ -9,6 +9,7 @@ export default function Input({ register, error, ...props }) {
           </label>
         )}
         <input
+           defaultValue={props.defaultValue}
           {...register}
           {...props}
           className={`rounded-[12px] w-full px-4 py-2 border ${

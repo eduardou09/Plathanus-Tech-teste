@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react';
 
-// import useNewsStore from '../stores/newsStore';
+
 import HomeMain from '../pages/Home';
-import { newsService } from '../services/newsServices';
-import { getNewsService } from '../services/getServices';
+import { newsService } from '../services/postNews';
+import useNewsStore from '../store/newsStore';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { newsFormSchema } from '../validations/newSchema';
 
 
 
@@ -13,24 +16,47 @@ import { getNewsService } from '../services/getServices';
     //   resolver: zodResolver(newsFormSchema)
     // });
   
-  // Store (Zustand)
-//   const { createNews, news, loading, error } = useNewsStore();
 
+  const { createNews, news, loading, error , updateNewsStore, editValues, setEditValues } = useNewsStore();
 
+   // Move o useForm para o container principal
+   const { register, handleSubmit, reset, control, formState: { errors } } = useForm({
+    resolver: zodResolver(newsFormSchema),
+    defaultValues: {
+      title: '',
+      content: '',
+      author: editValues?.author?.name || '', 
+    },
+  });
 
-
+ // Atualiza o formulário quando editValues muda
+ useEffect(() => {
+  if (editValues) {
+    reset({title: editValues.title,
+      content: editValues.content,
+      author: editValues.author?.name || '', } );
+    setIsOpen(true);
+  }
+}, [editValues, reset]);
+  
+  console.log({editValues})
   // Submit do formulário
   const onSubmit = async (data) => {
     console.log({data})
     try {
-      const response = await newsService(data); 
-      console.log("Resposta do backend:", response); 
-      
 
+    if (data.name) {
+      response = await updateNewsStore(data.id, data); 
+      alert("Notícia atualizada com sucesso!");
+    }  else {
+      const response = await newsService(data);  
+      alert("Notícia criada com sucesso!");
+    }
+   
+      console.log("Resposta do backend:", response); 
       setIsOpen(false);
       // formMethods.reset();
   
-     
       if (response.success) {
         alert("Notícia criada com sucesso!");
        
@@ -42,27 +68,12 @@ import { getNewsService } from '../services/getServices';
     }
   };
 
-  const handleEdit = async (data) => {
-    console.log({data})
-    try {
-      const response = await getNewsService(data); 
-      console.log("Resposta do backend:", response); 
-      
 
-      setIsOpen(true);
-      // formMethods.reset();
-  
-     
-      if (response.success) {
-        alert("Notícia criada com sucesso!");
-       
-      }
-    } catch (err) {
-      console.error("Erro ao criar notícia:", err);
-     
-      alert("Erro ao criar notícia. Tente novamente.");
-    }
-  };
+const handleEdit = (news) => {
+
+
+}
+ 
 
   return (
    <HomeMain
@@ -70,8 +81,12 @@ import { getNewsService } from '../services/getServices';
    openModal={() => setIsOpen(true)}
    closeModal={() => setIsOpen(false)}
   // formMethods={formMethods}
-  handleEdit={handleEdit}
    onSubmit={onSubmit}
+   handleEdit={handleEdit}
+   register={register}
+   control={control}
+   errors={errors}
+   handleSubmit={handleSubmit}
     />
   );
 }

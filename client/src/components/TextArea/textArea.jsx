@@ -6,6 +6,7 @@ const TextArea = React.forwardRef(({
   error,
   className = "",
   rows = 4,
+  defaultValue,
   ...props
 }, ref) => {
   return (
@@ -14,6 +15,7 @@ const TextArea = React.forwardRef(({
       
       <textarea
         ref={ref}
+        defaultValue={defaultValue}
         placeholder={placeholder}
         rows={rows}
         className={`rounded-[12px] w-full px-4 py-2 border ${
