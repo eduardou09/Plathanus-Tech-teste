@@ -1,7 +1,7 @@
-
 import apiClient from './api/apiClient';
 
-export const newsService = async (data) => {
+
+export const createNewsService = async (data) => {
     try {
       const response = await apiClient.post('/news', data);
       return {

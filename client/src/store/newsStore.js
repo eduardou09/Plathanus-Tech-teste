@@ -1,6 +1,11 @@
 import { create } from 'zustand';
 import apiClient from '../services/api/apiClient';
 import { deleteNewsService } from '../services/deleteNews';
+import { updateNews } from '../services/updateNews';
+import { createNewsService } from '../services/creatNews';
+import { getNewsService } from '../services/getNews';
+
+
 
 
 const useNewsStore = create((set) => ({
@@ -17,22 +22,35 @@ const useNewsStore = create((set) => ({
   fetchNews: async () => {
     set({ isLoading: true, error: null });
     try {
-      const response = await apiClient.get('/news');
+      const response = await getNewsService();
       set({ news: response.data, isLoading: false });
     } catch (error) {
       set({ error: error.response?.data?.message || 'Erro ao buscar notícias', isLoading: false });
     }
   },
 
-    createNews: async (data) => {
-        try {
-        const response = await apiClient.post('/news', data);
-        return response.data;
-        } catch (error) {
-        throw new Error(error.response?.data?.message || 'Erro ao criar notícia');
-        }
-    },
+  createNewsStore: async (data) => {
+    console.log({ data });
+    try {
+      const response = await createNewsService(data);
+      console.log({ response });
+      
+      // Mantenha a mesma estrutura de retorno do serviço
+      return {
+        success: response.success,
+        data: response.data,
+        error: response.error
+      };
+      
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message || 'Erro ao criar notícia'
+      };
+    }
+  },
 
+  
     deleteNews: async (id) => {
       set({ isLoading: true, error: null });
   
@@ -53,9 +71,9 @@ const useNewsStore = create((set) => ({
 
     updateNewsStore: async (id, updatedData) => {
       set({ isLoading: true, error: null });
-  
+      
       const result = await updateNews(id, updatedData); // Chama o serviço
-  
+      console.log({ result });
       if (result.success) {
         // Atualiza o estado local com os novos dados
         set((state) => ({

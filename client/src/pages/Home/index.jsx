@@ -10,21 +10,20 @@ export default function homeMain({
   onSubmit,
   openModal,
   closeModal,
-  handleEdit,
   register,
   control,
   errors,
   handleSubmit,
+  searchTerm,
+  setSearchTerm,
+  news,
 }) {
-  const { news, fetchNews } = useNewsStore();
-
-  useEffect(() => {
-    fetchNews();
-  }, []);
-
   console.log({ news });
   return (
-    <div className="flex flex-col gap-10 w-full">
+    <main className="flex flex-col gap-2 w-full">
+      {" "}
+      {/* Use <main> para conteúdo principal */}
+      {/* Título oculto para leitores de tela */}
       {isOpen && (
         <Modal
           onSubmit={onSubmit}
@@ -35,23 +34,32 @@ export default function homeMain({
           handleSubmit={handleSubmit}
         />
       )}
-
       {/* Botão que abre a modal */}
-      <div className="flex gap-3 items-center w-full justify-end">
-        <div
-          className="bg-button rounded-[8px] flex items-center p-3 cursor-pointer"
-          onClick={openModal}
-        >
-          <FaPlus className="text-lg" />
-        </div>
-        <Input />
-      </div>
+      <section className="flex gap-3 items-center w-full justify-between">
+        <h1 className="text-black font-semibold text-2xl">Plathanus News</h1>
 
-      <div className="">
-        <div className="">
-          <LineCards news={news} handleEdit={handleEdit} />
+        <div className="flex gap-3 items-center">
+          <div
+            className="bg-button rounded-[8px] flex items-center p-3 cursor-pointer"
+            onClick={openModal}
+          >
+            <FaPlus className="text-lg" />
+          </div>
+          <Input
+            placeholder="Buscar notícias..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
         </div>
-      </div>
-    </div>
+      </section>
+      <section className="">
+        {news.last7News.length > 0 && (
+          <LineCards news={news.last7News} title={"Últimas Notícias"} />
+        )}
+        {news.otherNews.length > 0 && (
+          <LineCards news={news.otherNews} title={"Notícias Anteriores "} />
+        )}
+      </section>
+    </main>
   );
 }

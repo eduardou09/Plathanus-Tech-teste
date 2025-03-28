@@ -1,5 +1,5 @@
 // services/newsService.js
-import apiClient from './apiClient';
+import apiClient from './api/apiClient';
 
 // Função para atualizar uma notícia
 export const updateNews = async (id, data) => {
