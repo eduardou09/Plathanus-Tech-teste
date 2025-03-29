@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import HomeMain from "../pages/Home";
 import useNewsStore from "../store/newsStore";
-import { set, useForm } from "react-hook-form";
+import {  useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { newsFormSchema } from "../validations/newSchema";
 import { alertError, alertSuccess } from "../components/Alert/alert";
@@ -18,11 +18,10 @@ export default function HomeContainer() {
   // });
 
   const {
-    loading,
-    error,
+   
     updateNewsStore,
     editValues,
-    setEditValues,
+   
     createNewsStore,
     news, fetchNews 
   } = useNewsStore();
@@ -46,38 +45,48 @@ export default function HomeContainer() {
 
 
 
-  // Atualiza o formulário quando editValues muda
   useEffect(() => {
     console.log('--- Effect triggered ---');
     console.log('Current editValues:', editValues);
-    
+  
     if (editValues) {
       console.log('Preparing to reset form with values:', {
         title: editValues.title,
         content: editValues.content,
         author: editValues.author?.name || ""
       });
-      
+  
       const newValues = {
-        title: editValues.title,
-        content: editValues.content,
-        author: editValues.author?.name || ""
+        title: editValues.title || "", // Garante que sempre tenha um valor
+        content: editValues.content || "",
+        author: editValues.author?.name || "",
       };
-      
-      reset(newValues);
-      console.log('Form reset called with values');
-      
+  
+      reset(newValues); // Reset com novos valores
       setCurrentId(editValues.id);
-      console.log('Current ID set to:', editValues.id);
-      
       setIsOpen(true);
-      console.log('Modal opened');
     } else {
       console.log('Clearing form');
-      reset();
+      reset({
+        title: "",
+        content: "",
+        author: "",
+      }); // Passa valores vazios para garantir que o formulário seja limpo
       setCurrentId(null);
     }
   }, [editValues, reset]);
+  
+  const closeModal = () => {
+    setIsOpen(false); // Fecha o modal
+    editValues(null); // Limpa os valores de edição
+    reset({
+      title: "",
+      content: "",
+      author: "",
+    }); // Reseta o formulário
+    setCurrentId(null); // Limpa o ID atual
+  };
+  
 
   const onSubmit = async (data) => {
     console.log({ data }, "submit");
@@ -87,10 +96,11 @@ export default function HomeContainer() {
       if (currentId) {
         console.log("Modo edição");
         response = await updateNewsStore(currentId, data);
+        reset()
       } else {
         console.log("Modo criação");
         response = await createNewsStore(data);
-  
+        reset()
         if (response && !response.success && !response.error) {
           response = { success: true, data: response };
         }
@@ -119,21 +129,17 @@ export default function HomeContainer() {
                          err.message ||
                          "Erro ao processar a solicitação. Por favor, tente novamente.";
   
-      // Se tiver um componente alertError também
+     
       alertError({ 
         title: "Erro",
         message: errorMessage,
         type: "error"
       });
       
-      // Ou se usar o mesmo componente para ambos:
-      // alertSuccess({
-      //   title: "Erro",
-      //   message: errorMessage,
-      //   type: "error"
-      // });
     }
   };
+
+
 
 const handleSee = (item) =>{
   setSeeMore(true)
@@ -151,7 +157,7 @@ const handleSee = (item) =>{
         <HomeMain
         isOpen={isOpen}
         openModal={() => setIsOpen(true)}
-        closeModal={() => setIsOpen(false)}
+        closeModal={closeModal}
         // formMethods={formMethods}
         onSubmit={onSubmit}
         register={register}
@@ -171,13 +177,13 @@ const handleSee = (item) =>{
 }
 
 const filteredData = (news, filter) => {
-  console.log({ filter }); // Ver o que realmente está sendo passado
 
-  // Se não houver filtro, ordena e separa as notícias
+
+
   if (!filter) {
     console.log("Nenhum filtro aplicado");
 
-    // Ordenando as notícias pela data (do mais recente para o mais antigo)
+
     const sortedNews = [...news].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
     // Pegando as últimas 7 notícias

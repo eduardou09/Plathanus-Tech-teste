@@ -27,9 +27,7 @@ export default function homeMain({
   console.log({ news });
   return (
     <main className="flex flex-col gap-2 w-full">
-      {" "}
-      {/* Use <main> para conteúdo principal */}
-      {/* Título oculto para leitores de tela */}
+   
       {seeMore &&(
         <Read
         closeModal={() => setSeeMore(false)}
@@ -46,8 +44,8 @@ export default function homeMain({
           handleSubmit={handleSubmit}
         />
       )}
-      {/* Botão que abre a modal */}
-      <section className="flex gap-3 items-center w-full justify-between">
+    
+      <section className="flex gap-3 items-center w-full justify-between flex-wrap">
         <h1 className="text-black font-semibold text-2xl">Plathanus News</h1>
 
         <div className="flex gap-3 items-center">

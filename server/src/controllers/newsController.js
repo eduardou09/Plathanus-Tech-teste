@@ -1,11 +1,11 @@
-// src/controllers/newsController.js
+
 const pool = require('../config/db');
 const prisma = require('../lib/prisma');
 
 
 const getNews = async (req, res) => {
   try {
-    // Usando Prisma para buscar as notícias com os autores
+   
     const newsWithAuthors = await prisma.news.findMany({
       orderBy: {
         createdAt: 'desc',  // Ordena pela data de criação, do mais recente para o mais antigo
@@ -15,22 +15,21 @@ const getNews = async (req, res) => {
       },
     });
 
-    // Formatação dos dados para a estrutura esperada, incluindo o createdAt corretamente
     const formattedNews = newsWithAuthors.map(news => ({
       id: news.id,
       title: news.title,
       content: news.content,
-      createdAt: news.createdAt,  // Certificando que o campo createdAt está presente
+      createdAt: news.createdAt,
       author: {
         id: news.author.id,
         name: news.author.name,
       },
     }));
 
-    // Envia a resposta com as notícias e seus autores
+   
     res.json(formattedNews);
   } catch (err) {
-    // Retorna erro caso algo falhe
+    
     res.status(500).json({ error: err.message });
   }
 };
@@ -38,11 +37,10 @@ const getNews = async (req, res) => {
 
   
 // Criar nova notícia
-// src/controllers/newsController.js
 const createNews = async (req, res) => {
   const { title, content, author } = req.body;
 
-  // Verificar se os dados necessários foram passados
+
   if (!title || !content || !author) {
     return res.status(400).json({ error: "Dados incompletos" });
   }
@@ -60,15 +58,15 @@ const createNews = async (req, res) => {
       data: {
         title,
         content,
-        authorId: authorData.id, // Usar o id do autor retornado do upsert
+        authorId: authorData.id, 
       },
-      include: { author: true }, // Incluir os dados do autor na resposta, se necessário
+      include: { author: true }, // Incluir os dados do autor na resposta
     });
 
-    // Retorna a notícia criada
+  
     res.status(201).json(news);
   } catch (error) {
-    // Retorna um erro em caso de falha
+    
     res.status(500).json({
       error: "Erro interno",
       details: error.message,
@@ -76,16 +74,17 @@ const createNews = async (req, res) => {
   }
 };
 
+
 const deleteNews = async (req, res) => {
-  const { id } = req.params; // ID da notícia a ser excluída
+  const { id } = req.params;
   console.log('deleteNews', id);
-  // Validação básica do ID
+
   if (!id || isNaN(Number(id))) {
     return res.status(400).json({ error: "ID inválido" });
   }
 
   try {
-    // Verifica se a notícia existe
+   
     const newsExists = await prisma.news.findUnique({
       where: { id: Number(id) }
     });
@@ -94,17 +93,17 @@ const deleteNews = async (req, res) => {
       return res.status(404).json({ error: "Notícia não encontrada" });
     }
 
-    // Exclui a notícia
+  
     await prisma.news.delete({
       where: { id: Number(id) }
     });
 
-    res.status(204).send(); // Resposta sem conteúdo para sucesso
+    res.status(204).send();
 
   } catch (error) {
     console.error("Erro ao excluir notícia:", error);
     
-    // Tratamento específico para erros do Prisma
+
     if (error.code === 'P2025') {
       return res.status(404).json({ error: "Registro não encontrado" });
     }
@@ -116,18 +115,18 @@ const deleteNews = async (req, res) => {
   }
 };
 
-// src/controllers/newsController.js
+
 const updateNews = async (req, res) => {
   const { id } = req.params;
   const { title, content, author } = req.body;
 
-  // Validação básica dos dados
+
   if (!title || !content || !author) {
     return res.status(400).json({ error: "Dados incompletos" });
   }
 
   try {
-    // 1. Verifica se a notícia existe
+
     const existingNews = await prisma.news.findUnique({
       where: { id: Number(id) },
     });
@@ -136,27 +135,26 @@ const updateNews = async (req, res) => {
       return res.status(404).json({ error: "Notícia não encontrada" });
     }
 
-    // 2. Verifica ou cria o autor (similar ao createNews)
     const authorData = await prisma.author.upsert({
       where: { name: author },
       update: {},
       create: { name: author },
     });
 
-    // 3. Atualiza a notícia
+
     const updatedNews = await prisma.news.update({
       where: { id: Number(id) },
       data: {
         title,
         content,
-        authorId: authorData.id, // Atualiza com o ID do autor
+        authorId: authorData.id, 
       },
       include: {
-        author: true, // Inclui os dados do autor na resposta
+        author: true, 
       },
     });
 
-    // Formata a resposta para manter consistência com getNews
+    
     const formattedResponse = {
       id: updatedNews.id,
       title: updatedNews.title,
@@ -173,7 +171,7 @@ const updateNews = async (req, res) => {
   } catch (error) {
     console.error("Erro ao atualizar notícia:", error);
     
-    // Tratamento específico para erros do Prisma
+
     if (error.code === 'P2025') {
       return res.status(404).json({ error: "Registro não encontrado" });
     }

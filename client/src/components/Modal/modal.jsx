@@ -84,13 +84,13 @@ export default function Modal({ onSubmit, closeModal, register, control, errors,
               <button
                 type="button"
                 onClick={closeModal}
-                className="px-4 py-2 border border-gray-300 rounded"
+                className="px-4 py-2 border bg-red-500 hover:bg-red-600 text-white rounded"
               >
                 Cancelar
               </button>
               <button
                 type="submit"
-                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                className="px-4 py-2 bg-button text-white rounded hover:bg-[#5ddd99]"
                 
               >
                 Salvar

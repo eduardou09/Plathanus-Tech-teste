@@ -12,11 +12,11 @@ const useNewsStore = create((set) => ({
   news: [],
   isLoading: false,
   error: null,
-  editValues: null, // Objeto com { id, title, content, author }
-   // Função para definir os valores do formulário de edição
+  editValues: null, 
+
    setEditValues: (values) => set({ editValues: values }),
 
-   // Função para limpar os valores (opcional)
+   
    clearEditValues: () => set({ editValues: null }),
 
   fetchNews: async () => {
@@ -35,7 +35,7 @@ const useNewsStore = create((set) => ({
       const response = await createNewsService(data);
       console.log({ response });
       
-      // Mantenha a mesma estrutura de retorno do serviço
+ 
       return {
         success: response.success,
         data: response.data,
@@ -54,10 +54,10 @@ const useNewsStore = create((set) => ({
     deleteNews: async (id) => {
       set({ isLoading: true, error: null });
   
-      const result = await deleteNewsService(id); // Chama o serviço
+      const result = await deleteNewsService(id); 
   
       if (result.success) {
-        // Atualiza o estado removendo a notícia deletada
+     
         set((state) => ({
           news: state.news.filter((item) => item.id !== id),
           isLoading: false,
@@ -66,16 +66,18 @@ const useNewsStore = create((set) => ({
         set({ error: result.error, isLoading: false });
       }
   
-      return result; // Retorna o resultado para uso no componente
+      return result; 
     },
 
+
+    
     updateNewsStore: async (id, updatedData) => {
       set({ isLoading: true, error: null });
       
-      const result = await updateNews(id, updatedData); // Chama o serviço
+      const result = await updateNews(id, updatedData); 
       console.log({ result });
       if (result.success) {
-        // Atualiza o estado local com os novos dados
+      
         set((state) => ({
           news: state.news.map((item) =>
             item.id === id ? { ...item, ...result.data } : item
@@ -86,7 +88,7 @@ const useNewsStore = create((set) => ({
         set({ error: result.error, isLoading: false });
       }
   
-      return result; // Retorna o resultado para uso no componente
+      return result; 
     },
 }));
 
