@@ -23,7 +23,7 @@ const LineCards = ({ news, title,   handleSee}) => {
   wrapperClass=""  /* Padding lateral menor */
   breakpoints={{
     640: {
-      slidesPerView: 2,
+      slidesPerView: 2.2,
       spaceBetween: 8
     },
     768: {
@@ -31,8 +31,9 @@ const LineCards = ({ news, title,   handleSee}) => {
       spaceBetween: 12
     },
     1024: {
-      slidesPerView: 4,
-      spaceBetween: 24,
+      slidesPerView: 4.2,  /* Aqui definimos 4.5 para ver o próximo slide parcialmente */
+      spaceBetween: 24, 
+    
       wrapperClass: "px-4 py-4" ,
       className: "!overflow-visible py-8"
     }

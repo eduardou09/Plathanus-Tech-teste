@@ -9,9 +9,9 @@ export default function Read({ closeModal, newsSelected }) {
       />
       <main className="relative z-50 bg-white p-6 rounded-lg w-full h-full max-h-none sm:max-h-[90vh] sm:max-w-2xl sm:mx-4 sm:rounded-lg overflow-y-auto">
         <header className="w-full flex  justify-between">
-          <h1 className="text-2xl font-bold mb-4">{newsSelected?.title}</h1>
+          <h1 className="text-2xl font-bold mb-4 w-3/4">{newsSelected?.title}</h1>
           <button type="button" onClick={closeModal} className="cursor-pointer">
-            <IoMdClose className="text-lg" />
+            <IoMdClose className="text-xl" />
           </button>
         </header>
 

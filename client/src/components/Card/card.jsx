@@ -6,7 +6,7 @@ const Card = ({ item, loadingNumber, handleSee }) => {
   const { deleteNews, setEditValues } = useNewsStore();
   return (
     <div className="flex flex-col bg-white p-4 gap-5 rounded-[20px] max-h-[230px] min-h-[280px] flex-1  max-md:w-full shadow-md hover:shadow-lg transition-shadow duration-300 ">
-      <div className="flex flex-col gap-5 mt-4  justify-between flex-1 w">
+      <div className="flex flex-col gap-3 mt-4  justify-between flex-1 w">
         <h2 className="text-2xl font-bold text-black overflow-hidden flex-1 h-full jus line-clamp-2 mb-">
           {item.title}
         </h2>
