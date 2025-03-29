@@ -52,3 +52,11 @@ Este projeto implementa uma tela de notícias onde é possível cadastrar, pesqu
 5. Para suporte mobile, recarregue a página ou pressione F5.
 
 Agora a aplicação estará disponível para uso!
+
+
+## Conhecimentos Adicionais
+
+- **Docker**: Experiência em configurar e rodar ambientes isolados com Docker, especialmente com containers PostgreSQL.
+- **Push Notifications**: Implementação de **Push Notifications** para aumentar o engajamento dos usuários.
+- **Next.js**: Experiência com **Next.js** e **TypeScript** para desenvolvimento de aplicações web.
+- **Supabase e Firebase**: Trabalhei com **Supabase** e **Firebase** para implementar soluções de backend, autenticação e armazenamento de dados.
