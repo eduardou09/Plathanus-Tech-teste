@@ -1,7 +1,6 @@
 import apiClient from "./api/apiClient";
 
 export const deleteNewsService = async (id) => {
-    console.log('deleteNewsService', id);
     try {
         const response = await apiClient.delete(`/news/${id}`);
       

@@ -77,7 +77,7 @@ const createNews = async (req, res) => {
 
 const deleteNews = async (req, res) => {
   const { id } = req.params;
-  console.log('deleteNews', id);
+
 
   if (!id || isNaN(Number(id))) {
     return res.status(400).json({ error: "ID inválido" });

@@ -30,12 +30,13 @@ const useNewsStore = create((set) => ({
   },
 
   createNewsStore: async (data) => {
-    console.log({ data });
+
     try {
-      const response = await createNewsService(data);
-      console.log({ response });
-      
- 
+      const response = await createNewsService(data);    
+      if (response.success) {
+        // Atualiza a lista de notícias chamando fetchNews()
+        await useNewsStore.getState().fetchNews();
+      }
       return {
         success: response.success,
         data: response.data,
@@ -75,7 +76,7 @@ const useNewsStore = create((set) => ({
       set({ isLoading: true, error: null });
       
       const result = await updateNews(id, updatedData); 
-      console.log({ result });
+
       if (result.success) {
       
         set((state) => ({

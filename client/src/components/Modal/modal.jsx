@@ -7,7 +7,14 @@ import Select from "../Select/select";
 import TextArea from "../TextArea/textArea";
 import { newsFormSchema } from "../../validations/newSchema";
 
-export default function Modal({ onSubmit, closeModal, register, control, errors, handleSubmit  }) {
+export default function Modal({
+  onSubmit,
+  closeModal,
+  register,
+  control,
+  errors,
+  handleSubmit,
+}) {
   // const {
   //   register,
   //   handleSubmit,
@@ -27,7 +34,7 @@ export default function Modal({ onSubmit, closeModal, register, control, errors,
       <div className="relative z-50 bg-white p-6 rounded-lg max-w-md w-full mx-4">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="gap-4 flex flex-col">
-            <div className="flex w-full justify-between items-center">
+            <header className="flex w-full justify-between items-center">
               <h2 className="font-semibold text-2xl">Insira sua notícia</h2>
               <button
                 type="button"
@@ -36,9 +43,9 @@ export default function Modal({ onSubmit, closeModal, register, control, errors,
               >
                 <IoMdClose className="text-lg" />
               </button>
-            </div>
+            </header>
 
-            <div className="flex flex-col gap-3">
+            <section className="flex flex-col gap-3">
               <Input
                 // defaultValue= {}
                 {...register("title")}
@@ -60,27 +67,14 @@ export default function Modal({ onSubmit, closeModal, register, control, errors,
 
               <Input
                 {...register("author")}
-                placeholder="Insira nome do autor"
+                placeholder="Insira o nome do autor"
                 width="w-full"
                 label="Autor"
                 error={errors.author?.message}
               />
-{/* 
-<Select
-        control={control}
-        name="category"
-        label="Cidade"
-        options={[
-          { value: "1", label: "Florianópolis" },
-          { value: "2", label: "Palhoça" },
-        ]}
-        error={errors.category?.message}
-        rules={{ required: "Selecione uma cidade" }}
-        watch={watch}
-      /> */}
-            </div>
+            </section>
 
-            <div className="flex justify-between mt-6">
+            <section className="flex justify-between mt-6">
               <button
                 type="button"
                 onClick={closeModal}
@@ -91,11 +85,10 @@ export default function Modal({ onSubmit, closeModal, register, control, errors,
               <button
                 type="submit"
                 className="px-4 py-2 bg-button text-white rounded hover:bg-[#5ddd99]"
-                
               >
                 Salvar
               </button>
-            </div>
+            </section>
           </div>
         </form>
       </div>

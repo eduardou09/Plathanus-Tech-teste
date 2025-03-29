@@ -23,8 +23,7 @@ export default function homeMain({
   handleSee,
   newsSelected
 }) {
-  console.log({seeMore})
-  console.log({ news });
+
   return (
     <main className="flex flex-col gap-2 w-full">
    

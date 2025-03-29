@@ -6,6 +6,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { newsFormSchema } from "../validations/newSchema";
 import { alertError, alertSuccess } from "../components/Alert/alert";
 import { Toaster } from "react-hot-toast";
+import Loading from "../components/Loading/loading";
+
+
 
 export default function HomeContainer() {
   const [isOpen, setIsOpen] = useState(false);
@@ -21,12 +24,11 @@ export default function HomeContainer() {
    
     updateNewsStore,
     editValues,
-   
+    isLoading,
     createNewsStore,
     news, fetchNews 
   } = useNewsStore();
 
- 
   const {
     register,
     handleSubmit,
@@ -43,21 +45,15 @@ export default function HomeContainer() {
     },
   });
 
+  useEffect(() => {
+    fetchNews();
+  }, []);
 
 
   useEffect(() => {
-    console.log('--- Effect triggered ---');
-    console.log('Current editValues:', editValues);
-  
     if (editValues) {
-      console.log('Preparing to reset form with values:', {
-        title: editValues.title,
-        content: editValues.content,
-        author: editValues.author?.name || ""
-      });
-  
       const newValues = {
-        title: editValues.title || "", // Garante que sempre tenha um valor
+        title: editValues.title || "", 
         content: editValues.content || "",
         author: editValues.author?.name || "",
       };
@@ -66,7 +62,6 @@ export default function HomeContainer() {
       setCurrentId(editValues.id);
       setIsOpen(true);
     } else {
-      console.log('Clearing form');
       reset({
         title: "",
         content: "",
@@ -77,28 +72,26 @@ export default function HomeContainer() {
   }, [editValues, reset]);
   
   const closeModal = () => {
-    setIsOpen(false); // Fecha o modal
-    editValues(null); // Limpa os valores de edição
+    setIsOpen(false); 
+    setCurrentId(null); 
     reset({
       title: "",
       content: "",
       author: "",
-    }); // Reseta o formulário
-    setCurrentId(null); // Limpa o ID atual
+    }); 
+  
+    useNewsStore.getState().editValues = null; 
   };
   
 
   const onSubmit = async (data) => {
-    console.log({ data }, "submit");
     try {
       let response;
   
       if (currentId) {
-        console.log("Modo edição");
         response = await updateNewsStore(currentId, data);
         reset()
       } else {
-        console.log("Modo criação");
         response = await createNewsStore(data);
         reset()
         if (response && !response.success && !response.error) {
@@ -146,13 +139,11 @@ const handleSee = (item) =>{
   setNewsSelected(item)
 }
 
-  useEffect(() => {
-    fetchNews();
-  }, []);
-
   return (
     <>
+
       {" "}
+      { isLoading && <Loading/>}
       <Toaster position="top-center" reverseOrder={false} />
         <HomeMain
         isOpen={isOpen}
@@ -181,8 +172,6 @@ const filteredData = (news, filter) => {
 
 
   if (!filter) {
-    console.log("Nenhum filtro aplicado");
-
 
     const sortedNews = [...news].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
@@ -197,8 +186,6 @@ const filteredData = (news, filter) => {
 
 
   const searchTerm = filter.toLowerCase(); 
-  console.log({ searchTerm });
-
 
   const filteredNews = news.filter((item) =>
     item.title.toLowerCase().includes(searchTerm) ||
