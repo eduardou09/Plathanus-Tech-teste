@@ -9,7 +9,9 @@ Este projeto implementa uma tela de notícias onde é possível cadastrar, pesqu
 - **Filtro no banco**: Não implementei o filtro diretamente no banco de dados devido ao tamanho reduzido da aplicação e ao baixo volume de dados. A filtragem ocorre no frontend para evitar complexidade desnecessária.
 - **Mobile**: Para garantir que o layout seja responsivo em dispositivos móveis, é necessário recarregar a página ou pressionar F5, pois a biblioteca utilizada requer essa configuração específica.
 - **Banco de Dados**: Utilizei **PostgreSQL** para armazenar os dados e **Docker** para rodar o banco. O banco foi criado manualmente no Docker, configurando a senha, porta e conectando-o ao **pgAdmin** para gerenciamento.
-- **Padrão de Projeto**: O projeto segue o padrão **MVC (Model-View-Controller)** para organização do backend, garantindo modularidade e manutenção eficiente.
+- **Padrão de Projeto**: 
+   - **Backend** → Arquitetura baseada no padrão **MVC**, com algumas camadas adicionais para melhor organização. 
+   - **Frontend** → Componentização seguindo o conceito de **Atomic Design**, garantindo reutilização e escalabilidade.  
 - **ORM**: Utilizei **Prisma** para modelar e gerenciar o banco de dados, facilitando a criação das tabelas e garantindo um acesso eficiente aos dados.
 - **Gerenciamento de Estado**: No frontend, utilizei **Zustand** para gerenciar o estado global da aplicação de forma simples e performática.
 - **Formulários**: Para manipulação de formulários, utilizei **React Hook Form** em conjunto com **Zod** para validação, garantindo uma experiência fluida e segura para o usuário.
